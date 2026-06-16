@@ -39,10 +39,22 @@ export const verifyPaymentSignature = (orderId, paymentId, signature) => {
   if (keyId === 'rzp_test_demo') {
     return signature === 'mock_signature_success';
   }
+  if (!keySecret) {
+    console.error('❌ RAZORPAY_KEY_SECRET is missing or undefined in environment variables!');
+  }
   const expectedSignature = crypto
-    .createHmac('sha256', keySecret)
+    .createHmac('sha256', keySecret || '')
     .update(`${orderId}|${paymentId}`)
     .digest('hex');
+  
+  console.log('--- Razorpay Signature Verification ---');
+  console.log(`Order ID (Razorpay): ${orderId}`);
+  console.log(`Payment ID (Razorpay): ${paymentId}`);
+  console.log(`Received Signature: ${signature}`);
+  console.log(`Expected Signature: ${expectedSignature}`);
+  console.log(`Key Secret Length: ${keySecret ? keySecret.length : 0}`);
+  console.log('----------------------------------------');
+
   return expectedSignature === signature;
 };
 
