@@ -643,7 +643,9 @@ function TSSProductCard({ product }) {
 
         {/* Bottom Full-width Badge */}
         {bottomText && (
-          <div className="absolute bottom-0 left-0 right-0 bg-[#161616] text-white text-[9px] sm:text-[10px] font-black tracking-widest py-1.5 text-center uppercase z-10">
+          <div className={`absolute bottom-0 left-0 right-0 bg-[#161616] text-white text-[9px] sm:text-[10px] font-black tracking-widest py-1.5 text-center uppercase z-10 transition-transform duration-300 transform ${
+            hovered ? 'translate-y-0' : 'translate-y-full'
+          }`}>
             {bottomText}
           </div>
         )}
