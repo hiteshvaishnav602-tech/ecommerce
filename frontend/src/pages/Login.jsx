@@ -27,7 +27,7 @@ export default function LoginPage() {
   }
 
   const handleGoogleLogin = () => {
-    dispatch(loginUser({ email: 'user@bewakoof.com', password: 'User@123456' }))
+    dispatch(loginUser({ email: 'customer@chawk.com', password: 'User@123456' }))
   }
 
   return (
@@ -207,14 +207,14 @@ export default function LoginPage() {
             </span>
             <button
               type="button"
-              onClick={() => handleQuickFill('admin@bewakoof.com', 'Admin@123456')}
+              onClick={() => handleQuickFill('admin@chawk.com', 'Admin@123456')}
               className="px-2 py-0.5 bg-white border border-gray-200 hover:border-black rounded-lg font-extrabold text-gray-700 hover:text-black text-[9px] uppercase tracking-wider transition-all shadow-sm"
             >
               Admin
             </button>
             <button
               type="button"
-              onClick={() => handleQuickFill('user@bewakoof.com', 'User@123456')}
+              onClick={() => handleQuickFill('customer@chawk.com', 'User@123456')}
               className="px-2 py-0.5 bg-white border border-gray-200 hover:border-black rounded-lg font-extrabold text-gray-700 hover:text-black text-[9px] uppercase tracking-wider transition-all shadow-sm"
             >
               User

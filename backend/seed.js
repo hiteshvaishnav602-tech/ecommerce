@@ -27,8 +27,8 @@ const seed = async () => {
 
   // Create admin
   const admin = await User.create({
-    name: 'Admin Bewakoof',
-    email: process.env.ADMIN_EMAIL || 'admin@bewakoof.com',
+    name: 'Admin Chawk',
+    email: process.env.ADMIN_EMAIL || 'admin@chawk.com',
     password: process.env.ADMIN_PASSWORD || 'Admin@123456',
     role: 'admin',
   });
@@ -37,13 +37,13 @@ const seed = async () => {
   // Create test user
   const user = await User.create({
     name: 'Test User',
-    email: 'user@bewakoof.com',
+    email: 'customer@chawk.com',
     password: 'User@123456',
     role: 'user',
   });
   await Cart.create({ user: user._id, items: [] });
   await Wishlist.create({ user: user._id, products: [] });
-  console.log(`✅ Test user created: user@bewakoof.com`);
+  console.log(`✅ Test user created: customer@chawk.com`);
 
 
 
@@ -85,8 +85,8 @@ const seed = async () => {
 
   console.log('\n🎉 Seed completed successfully!\n');
   console.log('📋 Test Credentials:');
-  console.log(`   Admin: admin@bewakoof.com / Admin@123456`);
-  console.log(`   User:  user@bewakoof.com  / User@123456`);
+  console.log(`   Admin: admin@chawk.com / Admin@123456`);
+  console.log(`   User:  customer@chawk.com  / User@123456`);
   console.log('\n🏷️  Test Coupons:');
   console.log('   WELCOME10 | FLAT100 | SAVE20\n');
 

@@ -461,16 +461,8 @@ function LatestDropsSlider({ banners, gender, loading }) {
                 src={drop.image}
                 alt={drop.title}
                 className="w-full h-full object-cover"
-                style={{ opacity: isLightBg ? 0.9 : 0.7 }}
+                style={{ opacity: 1 }}
               />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 sm:px-8">
-                <p className="text-[10px] xs:text-xs sm:text-lg md:text-xl font-light mb-1 sm:mb-3 tracking-[0.2em] sm:tracking-[0.3em] uppercase" style={{ color: drop.textColor, opacity: 0.85 }}>
-                  {drop.subtitle}
-                </p>
-                <h3 className="text-lg xs:text-2xl sm:text-4xl md:text-5xl font-black mb-2 sm:mb-6 uppercase tracking-tight leading-tight max-w-2xl" style={{ fontFamily: 'Outfit, sans-serif', color: drop.textColor }}>
-                  {drop.title}
-                </h3>
-              </div>
             </Link>
             {/* Logo Overlay */}
             <div className="absolute bottom-2.5 right-1 pointer-events-none z-10 select-none">
