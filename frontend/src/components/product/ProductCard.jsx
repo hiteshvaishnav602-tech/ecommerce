@@ -81,14 +81,7 @@ export default function ProductCard({ product, index = 0 }) {
           </div>
         )}
 
-        {/* Discount badge */}
-        {discountPercent > 0 && (
-          <div className="absolute top-2 left-2" style={{ top: product.fit ? '28px' : '8px' }}>
-            <span className="bg-[#ffe600] text-black text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 leading-none">
-              -{discountPercent}%
-            </span>
-          </div>
-        )}
+
 
         {/* Wishlist button */}
         <button

@@ -668,14 +668,7 @@ function TSSProductCard({ product }) {
           </div>
         )}
 
-        {/* Discount badge */}
-        {product.discountPercent > 0 && (
-          <div className="absolute top-2.5 right-2.5 z-10">
-            <span className="bg-[#ffe600] text-black text-[10px] font-bold px-2 py-1">
-              -{product.discountPercent}%
-            </span>
-          </div>
-        )}
+
 
         {/* Wishlist */}
         <button className="absolute top-2.5 right-2.5 w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors shadow-sm opacity-100 md:opacity-0 md:group-hover:opacity-100 z-20">

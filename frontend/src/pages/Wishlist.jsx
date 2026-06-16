@@ -172,14 +172,7 @@ export default function WishlistPage() {
                       </div>
                     )}
 
-                    {/* Right Top Discount Tag */}
-                    {discountPercent > 0 && (
-                      <div className="absolute top-3 right-3 z-10">
-                        <span className="bg-[#ffe600] text-black text-[9px] sm:text-[10px] font-black tracking-wider px-2 py-1 uppercase shadow-sm">
-                          -{discountPercent}%
-                        </span>
-                      </div>
-                    )}
+
 
                     {/* Floating Bottom Overlay for logo branding */}
                     <div className="absolute bottom-2 right-2 pointer-events-none z-10 select-none opacity-0 group-hover:opacity-100 transition-opacity">
