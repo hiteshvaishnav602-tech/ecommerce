@@ -71,12 +71,8 @@ export const verifyPayment = async (req, res, next) => {
     { items: [], coupon: null, couponDiscount: 0 }
   );
 
-  // Send email
-  try {
-    await sendOrderConfirmationEmail(req.user.email, req.user.name, order);
-  } catch (error) {
-    console.error('❌ Payment verify order confirmation email failed:', error.message);
-  }
+  // Send email (async, non-blocking)
+  sendOrderConfirmationEmail(req.user.email, req.user.name, order);
 
   res.status(200).json({ success: true, message: 'Payment verified. Order confirmed! 🎉', order });
 };

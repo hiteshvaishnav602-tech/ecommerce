@@ -135,11 +135,7 @@ export const createOrder = async (req, res, next) => {
       { items: [], coupon: null, couponDiscount: 0 }
     );
     // Send confirmation email (async, don't block)
-    try {
-      await sendOrderConfirmationEmail(req.user.email, req.user.name, order);
-    } catch (error) {
-      console.error('❌ COD Order confirmation email failed:', error.message);
-    }
+    sendOrderConfirmationEmail(req.user.email, req.user.name, order);
   }
 
   res.status(201).json({

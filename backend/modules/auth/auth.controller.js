@@ -43,12 +43,8 @@ export const register = async (req, res, next) => {
   await Cart.create({ user: user._id, items: [] });
   await Wishlist.create({ user: user._id, products: [] });
 
-  // Send welcome email
-  try {
-    await sendWelcomeEmail(user.email, user.name);
-  } catch (error) {
-    console.error('Welcome email sending failed:', error.message);
-  }
+  // Send welcome email (async, non-blocking)
+  sendWelcomeEmail(user.email, user.name);
 
   sendTokenResponse(user, 201, res, 'Registration successful! Welcome to Aura 🎉');
 };
