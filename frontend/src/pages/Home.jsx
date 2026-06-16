@@ -151,7 +151,7 @@ function HeroBannerSlider({ banners, gender, loading }) {
     if (total <= 1) return
     const timer = setInterval(() => setCurrent(c => (c + 1) % total), 5000)
     return () => clearInterval(timer)
-  }, [total])
+  }, [total, current])
 
   if (loading && (!banners || banners.length === 0)) {
     return (
@@ -222,11 +222,18 @@ function HeroBannerSlider({ banners, gender, loading }) {
                 {/* Label overlay on middle panel */}
                 {i === 0 && slide.label && (
                   <div className="absolute inset-0 flex items-center justify-start p-6 sm:p-10 pointer-events-none">
-                    <div className="bg-[#ffe600] text-black font-black text-xl sm:text-3xl lg:text-4xl px-4 sm:px-6 py-2 sm:py-3 rounded-lg shadow-xl tracking-tight leading-none" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                    <motion.div
+                      key={slide.label}
+                      initial={{ opacity: 0, x: -30, scale: 0.95 }}
+                      animate={{ opacity: 1, x: 0, scale: 1 }}
+                      transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut' }}
+                      className="bg-[#ffe600] text-black font-black text-xl sm:text-3xl lg:text-4xl px-4 sm:px-6 py-2 sm:py-3 rounded-lg shadow-xl tracking-tight leading-none"
+                      style={{ fontFamily: 'Outfit, sans-serif' }}
+                    >
                       {slide.label.split(' ').slice(0, 1).join(' ')}
                       <br />
                       <span className="text-lg sm:text-2xl font-black">{slide.label.split(' ').slice(1).join(' ')}</span>
-                    </div>
+                    </motion.div>
                   </div>
                 )}
                 {/* Logo on third panel */}
@@ -256,11 +263,20 @@ function HeroBannerSlider({ banners, gender, loading }) {
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
-                className={`h-2.5 rounded-full transition-all ${i === current
-                  ? 'bg-[#147e85] w-6'
+                className={`h-2.5 rounded-full relative overflow-hidden transition-all duration-300 ${i === current
+                  ? 'bg-[#d1e7e9] w-12'
                   : 'bg-[#d1e7e9] hover:bg-[#b0d8db] w-2.5'
                   }`}
-              />
+              >
+                {i === current && (
+                  <motion.div
+                    initial={{ width: '0%' }}
+                    animate={{ width: '100%' }}
+                    transition={{ duration: 5, ease: 'linear' }}
+                    className="absolute inset-0 bg-[#147e85]"
+                  />
+                )}
+              </button>
             ))}
           </div>
         ) : (
