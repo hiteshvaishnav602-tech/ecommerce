@@ -245,26 +245,7 @@ function HeroBannerSlider({ banners, gender, loading }) {
           </Link>
         )}
 
-        {total > 1 && (
-          <>
-            {/* Left Arrow */}
-            <button
-              onClick={() => setCurrent(c => (c - 1 + total) % total)}
-              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 p-1.5 text-white/80 hover:text-white transition-all hover:scale-110 active:scale-95 z-10"
-              aria-label="Previous slide"
-            >
-              <FiChevronLeft size={24} className="sm:size-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" />
-            </button>
-            {/* Right Arrow */}
-            <button
-              onClick={() => setCurrent(c => (c + 1) % total)}
-              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 p-1.5 text-white/80 hover:text-white transition-all hover:scale-110 active:scale-95 z-10"
-              aria-label="Next slide"
-            >
-              <FiChevronRight size={24} className="sm:size-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" />
-            </button>
-          </>
-        )}
+
       </div>
 
       {/* Dots/Spacer Bar below the banner (exactly like The Souled Store) */}
@@ -476,24 +457,7 @@ function LatestDropsSlider({ banners, gender, loading }) {
           </motion.div>
         </AnimatePresence>
 
-        {total > 1 && (
-          <>
-            <button
-              onClick={() => setCurrent(c => (c - 1 + total) % total)}
-              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 p-1.5 text-white/80 hover:text-white transition-all hover:scale-110 active:scale-95 z-10"
-              aria-label="Previous slide"
-            >
-              <FiChevronLeft size={24} className="sm:size-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" />
-            </button>
-            <button
-              onClick={() => setCurrent(c => (c + 1) % total)}
-              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 p-1.5 text-white/80 hover:text-white transition-all hover:scale-110 active:scale-95 z-10"
-              aria-label="Next slide"
-            >
-              <FiChevronRight size={24} className="sm:size-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" />
-            </button>
-          </>
-        )}
+
 
         {/* Dots */}
         {total > 1 && (
