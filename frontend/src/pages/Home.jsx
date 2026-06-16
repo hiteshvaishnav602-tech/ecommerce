@@ -149,7 +149,7 @@ function HeroBannerSlider({ banners, gender, loading }) {
 
   useEffect(() => {
     if (total <= 1) return
-    const timer = setInterval(() => setCurrent(c => (c + 1) % total), 5000)
+    const timer = setInterval(() => setCurrent(c => (c + 1) % total), 4000)
     return () => clearInterval(timer)
   }, [total, current])
 
@@ -272,7 +272,7 @@ function HeroBannerSlider({ banners, gender, loading }) {
                   <motion.div
                     initial={{ width: '0%' }}
                     animate={{ width: '100%' }}
-                    transition={{ duration: 5, ease: 'linear' }}
+                    transition={{ duration: 4, ease: 'linear' }}
                     className="absolute inset-0 bg-[#147e85]"
                   />
                 )}
