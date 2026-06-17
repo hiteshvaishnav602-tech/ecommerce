@@ -5,11 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   FiMapPin, FiCheck, FiTruck, FiTag, FiChevronDown,
   FiMail, FiUser, FiPlus, FiX, FiShoppingBag,
-  FiCreditCard, FiSmartphone, FiAlertCircle, FiDollarSign
+  FiCreditCard, FiSmartphone, FiAlertCircle, FiDollarSign,
+  FiEdit2, FiTrash2
 } from 'react-icons/fi'
 import { createOrder, createPaymentOrder, verifyPayment } from '../redux/slices/orderSlice'
 import { selectCartSubtotal, applyCoupon, removeCoupon } from '../redux/slices/cartSlice'
-import { addAddress } from '../redux/slices/authSlice'
+import { addAddress, updateAddress, deleteAddress } from '../redux/slices/authSlice'
 import toast from 'react-hot-toast'
 import api from '../services/api'
 import { useForm } from 'react-hook-form'
@@ -96,6 +97,7 @@ export default function CheckoutPage() {
   const [showMockModal, setShowMockModal] = useState(false)
   const [mockPaymentData, setMockPaymentData] = useState(null)
   const [showAddressForm, setShowAddressForm] = useState(false)
+  const [editAddressId, setEditAddressId] = useState(null)
   const [couponCode, setCouponCode] = useState('')
   const [couponLoading, setCouponLoading] = useState(false)
   const [orderPlaced, setOrderPlaced] = useState(false) // prevent cart-empty redirect mid-payment
@@ -151,7 +153,19 @@ export default function CheckoutPage() {
       addressLine1: data.addressLine1, addressLine2: data.addressLine2,
       city: data.city, state: data.state, pincode: data.pincode,
     }
-    if (data.saveAddress) {
+    if (editAddressId) {
+      try {
+        const actionResult = await dispatch(updateAddress({ id: editAddressId, address: newAddr }))
+        if (!actionResult.error) {
+          const addrs = actionResult.payload
+          const updated = addrs?.find(a => a._id === editAddressId)
+          if (updated) {
+            setShippingAddress(updated)
+          }
+        }
+      } catch { toast.error('Failed to update address') }
+      setEditAddressId(null)
+    } else if (data.saveAddress) {
       try {
         const actionResult = await dispatch(addAddress(newAddr))
         if (!actionResult.error) {
@@ -168,6 +182,49 @@ export default function CheckoutPage() {
     }
     reset()
     setShowAddressForm(false)
+  }
+
+  const handleEditAddress = (addr) => {
+    setEditAddressId(addr._id)
+    reset({
+      name: addr.name,
+      phone: addr.phone,
+      addressLine1: addr.addressLine1,
+      addressLine2: addr.addressLine2 || '',
+      city: addr.city,
+      state: addr.state,
+      pincode: addr.pincode,
+      saveAddress: true
+    })
+  }
+
+  const handleDeleteAddress = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this address?')) return
+    try {
+      const actionResult = await dispatch(deleteAddress(id))
+      if (!actionResult.error) {
+        if (selectedAddressId === id) {
+          const remainingAddrs = actionResult.payload || []
+          if (remainingAddrs.length > 0) {
+            setSelectedAddressId(remainingAddrs[0]._id)
+            setShippingAddress(remainingAddrs[0])
+          } else {
+            setSelectedAddressId(null)
+            setShippingAddress(null)
+          }
+        }
+      }
+    } catch {
+      toast.error('Failed to delete address')
+    }
+  }
+
+  const toggleAddressForm = () => {
+    if (showAddressForm) {
+      reset()
+      setEditAddressId(null)
+    }
+    setShowAddressForm(!showAddressForm)
   }
 
   const handleMockPaymentSuccess = async () => {
@@ -369,7 +426,7 @@ export default function CheckoutPage() {
                   </div>
                 </div>
                 <button
-                  onClick={() => setShowAddressForm(!showAddressForm)}
+                  onClick={toggleAddressForm}
                   className="text-sm font-bold flex-shrink-0 transition-colors hover:opacity-80"
                   style={{ color: TSS_TEAL }}
                 >
@@ -395,18 +452,48 @@ export default function CheckoutPage() {
                           {user.addresses.map((addr) => {
                             const isSelected = selectedAddressId === addr._id
                             return (
-                              <label key={addr._id} className={`flex items-start gap-3 p-3 border cursor-pointer transition-colors ${isSelected ? 'border-[#009688] bg-teal-50/40' : 'border-gray-200 hover:border-gray-300'}`}>
-                                <input
-                                  type="radio" name="savedAddr" checked={isSelected}
-                                  onChange={() => { setSelectedAddressId(addr._id); setShippingAddress(addr) }}
-                                  className="mt-0.5 accent-[#009688]"
-                                />
-                                <div>
-                                  <p className="text-sm font-semibold text-gray-900">{addr.name} <span className="font-normal text-gray-500">— {addr.pincode}</span></p>
-                                  <p className="text-xs text-gray-500 mt-0.5">{addr.addressLine1}, {addr.city}, {addr.state}</p>
-                                  <p className="text-[11px] text-gray-400 mt-0.5">📞 {addr.phone}</p>
+                              <div
+                                key={addr._id}
+                                className={`flex items-start justify-between gap-3 p-3 border cursor-pointer transition-colors ${isSelected ? 'border-[#009688] bg-teal-50/40' : 'border-gray-200 hover:border-gray-300'}`}
+                                onClick={() => { setSelectedAddressId(addr._id); setShippingAddress(addr) }}
+                              >
+                                <div className="flex items-start gap-3">
+                                  <input
+                                    type="radio" name="savedAddr" checked={isSelected}
+                                    onChange={() => { setSelectedAddressId(addr._id); setShippingAddress(addr) }}
+                                    className="mt-0.5 accent-[#009688]"
+                                  />
+                                  <div>
+                                    <p className="text-sm font-semibold text-gray-900">{addr.name} <span className="font-normal text-gray-500">— {addr.pincode}</span></p>
+                                    <p className="text-xs text-gray-500 mt-0.5">{addr.addressLine1}, {addr.city}, {addr.state}</p>
+                                    <p className="text-[11px] text-gray-400 mt-0.5">📞 {addr.phone}</p>
+                                  </div>
                                 </div>
-                              </label>
+                                <div className="flex items-center gap-1">
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      handleEditAddress(addr);
+                                    }}
+                                    className="p-1.5 text-gray-400 hover:text-[#009688] hover:bg-gray-150 rounded transition-colors"
+                                    title="Edit Address"
+                                  >
+                                    <FiEdit2 size={13} />
+                                  </button>
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      handleDeleteAddress(addr._id);
+                                    }}
+                                    className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-gray-150 rounded transition-colors"
+                                    title="Delete Address"
+                                  >
+                                    <FiTrash2 size={13} />
+                                  </button>
+                                </div>
+                              </div>
                             )
                           })}
                           <button
@@ -421,14 +508,17 @@ export default function CheckoutPage() {
 
                       {/* New address form */}
                       <div>
-                        <button
-                          type="button"
-                          onClick={() => { }}
-                          className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 mb-3"
-                          style={{ color: TSS_TEAL }}
-                        >
-                          <FiPlus size={13} /> Add New Address
-                        </button>
+                        <p className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 mb-3" style={{ color: TSS_TEAL }}>
+                          {editAddressId ? (
+                            <>
+                              <FiEdit2 size={13} /> Edit Address
+                            </>
+                          ) : (
+                            <>
+                              <FiPlus size={13} /> Add New Address
+                            </>
+                          )}
+                        </p>
                         <form onSubmit={handleSubmit(handleAddressSubmit)} className="space-y-3 border border-gray-200 p-4 bg-gray-50">
                           <div className="grid grid-cols-2 gap-3">
                             <div>
@@ -512,13 +602,33 @@ export default function CheckoutPage() {
                               {errors.pincode && <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.pincode.message}</p>}
                             </div>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <input type="checkbox" id="saveAddr" {...register('saveAddress')} defaultChecked className="accent-[#009688]" />
-                            <label htmlFor="saveAddr" className="text-xs text-gray-500">Save to my profile</label>
+                          {!editAddressId && (
+                            <div className="flex items-center gap-2">
+                              <input type="checkbox" id="saveAddr" {...register('saveAddress')} defaultChecked className="accent-[#009688]" />
+                              <label htmlFor="saveAddr" className="text-xs text-gray-500">Save to my profile</label>
+                            </div>
+                          )}
+                          <div className="flex gap-2">
+                            <button
+                              type="submit"
+                              className="flex-grow py-2.5 text-white text-xs font-black uppercase tracking-widest"
+                              style={{ backgroundColor: TSS_TEAL }}
+                            >
+                              {editAddressId ? 'UPDATE & DELIVER' : 'SAVE & DELIVER'}
+                            </button>
+                            {editAddressId && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  reset()
+                                  setEditAddressId(null)
+                                }}
+                                className="px-4 py-2.5 border border-gray-300 text-gray-700 bg-white text-xs font-bold uppercase hover:bg-gray-100 transition-colors"
+                              >
+                                Cancel
+                              </button>
+                            )}
                           </div>
-                          <button type="submit" className="w-full py-2.5 text-white text-xs font-black uppercase tracking-widest" style={{ backgroundColor: TSS_TEAL }}>
-                            SAVE & DELIVER HERE
-                          </button>
                         </form>
                       </div>
                     </div>
