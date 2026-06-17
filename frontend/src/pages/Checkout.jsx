@@ -339,10 +339,10 @@ export default function CheckoutPage() {
       <StepBar step={step} />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 lg:py-8">
-        <div className="flex flex-col lg:flex-row gap-5 items-start">
+        <div className="flex flex-col lg:flex-row gap-5 lg:items-start">
 
           {/* ── LEFT COLUMN ── */}
-          <div className="flex-1 min-w-0 space-y-4">
+          <div className="w-full flex-1 min-w-0 space-y-4">
 
             {/* Delivery Address Card */}
             <div className="bg-white border border-gray-200">
