@@ -50,6 +50,11 @@ api.interceptors.response.use(
     const originalRequest = error.config
 
     if (error.response?.status === 401 && !originalRequest._retry) {
+      // Don't intercept 401 for login or register endpoints
+      if (originalRequest.url?.includes('/auth/login') || originalRequest.url?.includes('/auth/register')) {
+        return Promise.reject(error)
+      }
+
       originalRequest._retry = true
       const refreshToken = localStorage.getItem('bewakoof_refresh')
       if (refreshToken) {
@@ -63,12 +68,16 @@ api.interceptors.response.use(
           localStorage.removeItem('bewakoof_token')
           localStorage.removeItem('bewakoof_user')
           localStorage.removeItem('bewakoof_refresh')
-          window.location.href = '/login'
+          if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
+            window.location.href = '/login'
+          }
         }
       } else {
         localStorage.removeItem('bewakoof_token')
         localStorage.removeItem('bewakoof_user')
-        window.location.href = '/login'
+        if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
+          window.location.href = '/login'
+        }
       }
     }
 
