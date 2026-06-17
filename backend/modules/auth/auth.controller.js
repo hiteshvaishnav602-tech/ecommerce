@@ -244,3 +244,63 @@ export const refreshToken = async (req, res, next) => {
     return next(new ErrorResponse('Invalid refresh token', 401));
   }
 };
+
+// @desc    Google OAuth login/register
+// @route   POST /api/auth/google-login
+// @access  Public
+export const googleLogin = async (req, res, next) => {
+  const { accessToken } = req.body;
+
+  if (!accessToken) {
+    return next(new ErrorResponse('Please provide Google access token', 400));
+  }
+
+  try {
+    const googleRes = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${accessToken}`);
+    if (!googleRes.ok) {
+      return next(new ErrorResponse('Invalid Google token', 400));
+    }
+    const userData = await googleRes.json();
+    const { email, name, picture } = userData;
+
+    if (!email) {
+      return next(new ErrorResponse('Google account does not provide an email', 400));
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Create a new user with a random password
+      const randomPassword = crypto.randomBytes(16).toString('hex');
+      user = await User.create({
+        name: name || email.split('@')[0],
+        email: email.toLowerCase(),
+        password: randomPassword,
+        avatar: { url: picture || '' }
+      });
+
+      // Create empty cart and wishlist
+      await Cart.create({ user: user._id, items: [] });
+      await Wishlist.create({ user: user._id, products: [] });
+
+      // Send welcome email (async, non-blocking)
+      sendWelcomeEmail(user.email, user.name);
+    } else {
+      if (user.isBlocked) {
+        return next(new ErrorResponse('Account blocked. Contact support.', 403));
+      }
+      // Update avatar if not present
+      if (!user.avatar?.url && picture) {
+        user.avatar = { url: picture };
+      }
+    }
+
+    user.lastLogin = new Date();
+    await user.save({ validateBeforeSave: false });
+
+    sendTokenResponse(user, 200, res, 'Google login successful');
+  } catch (error) {
+    console.error('Google OAuth Error:', error);
+    return next(new ErrorResponse('Google OAuth failed. Please try again.', 500));
+  }
+};

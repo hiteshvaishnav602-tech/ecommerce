@@ -2,12 +2,13 @@ import express from 'express';
 const router = express.Router();
 import {
   register, login, logout, getMe, updateProfile, changePassword,
-  forgotPassword, resetPassword, addAddress, updateAddress, deleteAddress, refreshToken
+  forgotPassword, resetPassword, addAddress, updateAddress, deleteAddress, refreshToken, googleLogin
 } from './auth.controller.js';
 import { protect } from './auth.middleware.js';
 
 router.post('/register', register);
 router.post('/login', login);
+router.post('/google-login', googleLogin);
 router.post('/logout', protect, logout);
 router.post('/forgot-password', forgotPassword);
 router.put('/reset-password/:token', resetPassword);

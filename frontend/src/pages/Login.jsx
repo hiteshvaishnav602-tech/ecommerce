@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { motion } from 'framer-motion'
 import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight, FiShield, FiUser, FiTruck, FiAward, FiHeadphones } from 'react-icons/fi'
-import { loginUser, clearError } from '../redux/slices/authSlice'
+import { loginUser, clearError, googleLogin } from '../redux/slices/authSlice'
 
 export default function LoginPage() {
   const dispatch = useDispatch()
@@ -27,7 +27,28 @@ export default function LoginPage() {
   }
 
   const handleGoogleLogin = () => {
-    dispatch(loginUser({ email: 'customer@chawk.com', password: 'User@123456' }))
+    if (!window.google) {
+      toast.error('Google Sign-In is still loading. Please try again in a second.')
+      return
+    }
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '1043534568600-u22e84v1s5o3j3m86v7l7e2qg94vsd0u.apps.googleusercontent.com'
+    try {
+      const client = window.google.accounts.oauth2.initTokenClient({
+        client_id: clientId,
+        scope: 'email profile openid',
+        callback: async (tokenResponse) => {
+          if (tokenResponse && tokenResponse.access_token) {
+            dispatch(googleLogin(tokenResponse.access_token))
+          } else {
+            toast.error('Google sign-in was cancelled')
+          }
+        },
+      })
+      client.requestAccessToken({ prompt: 'select_account' })
+    } catch (err) {
+      console.error(err)
+      toast.error('Failed to initialize Google Login')
+    }
   }
 
   return (
