@@ -12,7 +12,7 @@ export default function LoginPage() {
   const { user, loading, error } = useSelector((s) => s.auth)
   const [showPassword, setShowPassword] = useState(false)
 
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm()
+  const { register, handleSubmit, formState: { errors } } = useForm()
 
   useEffect(() => {
     if (user) navigate('/')
@@ -21,10 +21,7 @@ export default function LoginPage() {
 
   const onSubmit = (data) => dispatch(loginUser(data))
 
-  const handleQuickFill = (email, password) => {
-    setValue('email', email, { shouldValidate: true })
-    setValue('password', password, { shouldValidate: true })
-  }
+
 
   const handleGoogleLogin = () => {
     if (!window.google) {
@@ -221,26 +218,7 @@ export default function LoginPage() {
             </Link>
           </p>
 
-          {/* Compact Quick Demo Access Panel */}
-          <div className="flex items-center justify-center gap-2 mt-5 py-1.5 px-3 bg-gray-50 border border-gray-100 rounded-xl">
-            <span className="text-gray-400 font-extrabold uppercase tracking-widest text-[9px] flex items-center gap-1">
-              <FiShield className="text-[#147e85]" /> DEMO:
-            </span>
-            <button
-              type="button"
-              onClick={() => handleQuickFill('admin@chawk.com', 'Admin@123456')}
-              className="px-2 py-0.5 bg-white border border-gray-200 hover:border-black rounded-lg font-extrabold text-gray-700 hover:text-black text-[9px] uppercase tracking-wider transition-all shadow-sm"
-            >
-              Admin
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickFill('customer@chawk.com', 'User@123456')}
-              className="px-2 py-0.5 bg-white border border-gray-200 hover:border-black rounded-lg font-extrabold text-gray-700 hover:text-black text-[9px] uppercase tracking-wider transition-all shadow-sm"
-            >
-              User
-            </button>
-          </div>
+
 
         </div>
       </div>
