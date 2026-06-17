@@ -249,7 +249,8 @@ export default function ProfilePage() {
                   <label className="input-label text-xs">Phone Number *</label>
                   <input
                     value={addrForm.phone}
-                    onChange={(e) => setAddrForm({ ...addrForm, phone: e.target.value })}
+                    onChange={(e) => setAddrForm({ ...addrForm, phone: e.target.value.replace(/[^0-9]/g, '') })}
+                    maxLength={10}
                     className="input py-2.5 text-sm"
                     placeholder="10-digit mobile number"
                     required
@@ -303,7 +304,7 @@ export default function ProfilePage() {
                   <label className="input-label text-xs">Pincode *</label>
                   <input
                     value={addrForm.pincode}
-                    onChange={(e) => setAddrForm({ ...addrForm, pincode: e.target.value })}
+                    onChange={(e) => setAddrForm({ ...addrForm, pincode: e.target.value.replace(/[^0-9]/g, '') })}
                     className="input py-2.5 text-sm"
                     placeholder="6-digit PIN"
                     maxLength={6}

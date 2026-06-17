@@ -433,16 +433,41 @@ export default function CheckoutPage() {
                           <div className="grid grid-cols-2 gap-3">
                             <div>
                               <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Full Name *</label>
-                              <input {...register('name', { required: true })} className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#009688] bg-white" placeholder="Full Name" />
+                              <input 
+                                {...register('name', { required: 'Full name is required' })} 
+                                className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#009688] bg-white" 
+                                placeholder="Full Name" 
+                              />
+                              {errors.name && <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.name.message}</p>}
                             </div>
                             <div>
                               <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Phone *</label>
-                              <input {...register('phone', { required: true, pattern: /^[6-9]\d{9}$/ })} className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#009688] bg-white" placeholder="10-digit number" />
+                              <input 
+                                {...register('phone', { 
+                                  required: 'Phone number is required',
+                                  pattern: {
+                                    value: /^[6-9]\d{9}$/,
+                                    message: 'Must be 10 digits starting with 6-9'
+                                  }
+                                })} 
+                                onInput={(e) => {
+                                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                }}
+                                maxLength={10}
+                                className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#009688] bg-white" 
+                                placeholder="10-digit number" 
+                              />
+                              {errors.phone && <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.phone.message}</p>}
                             </div>
                           </div>
                           <div>
                             <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Address Line 1 *</label>
-                            <input {...register('addressLine1', { required: true })} className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#009688] bg-white" placeholder="Flat, House no., Street" />
+                            <input 
+                              {...register('addressLine1', { required: 'Address is required' })} 
+                              className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#009688] bg-white" 
+                              placeholder="Flat, House no., Street" 
+                            />
+                            {errors.addressLine1 && <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.addressLine1.message}</p>}
                           </div>
                           <div>
                             <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Address Line 2</label>
@@ -451,15 +476,40 @@ export default function CheckoutPage() {
                           <div className="grid grid-cols-3 gap-3">
                             <div>
                               <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">City *</label>
-                              <input {...register('city', { required: true })} className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#009688] bg-white" placeholder="City" />
+                              <input 
+                                {...register('city', { required: 'City is required' })} 
+                                className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#009688] bg-white" 
+                                placeholder="City" 
+                              />
+                              {errors.city && <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.city.message}</p>}
                             </div>
                             <div>
                               <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">State *</label>
-                              <input {...register('state', { required: true })} className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#009688] bg-white" placeholder="State" />
+                              <input 
+                                {...register('state', { required: 'State is required' })} 
+                                className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#009688] bg-white" 
+                                placeholder="State" 
+                              />
+                              {errors.state && <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.state.message}</p>}
                             </div>
                             <div>
                               <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Pincode *</label>
-                              <input {...register('pincode', { required: true, pattern: /^\d{6}$/ })} className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#009688] bg-white" placeholder="6-digit PIN" maxLength={6} />
+                              <input 
+                                {...register('pincode', { 
+                                  required: 'Pincode is required',
+                                  pattern: {
+                                    value: /^\d{6}$/,
+                                    message: 'Must be exactly 6 digits'
+                                  }
+                                })} 
+                                onInput={(e) => {
+                                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                }}
+                                className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#009688] bg-white" 
+                                placeholder="6-digit PIN" 
+                                maxLength={6} 
+                              />
+                              {errors.pincode && <p className="text-red-500 text-[10px] mt-1 font-semibold">{errors.pincode.message}</p>}
                             </div>
                           </div>
                           <div className="flex items-center gap-2">

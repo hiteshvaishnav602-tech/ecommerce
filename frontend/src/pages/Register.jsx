@@ -105,6 +105,10 @@ export default function RegisterPage() {
                 <FiPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors" size={16} />
                 <input
                   {...register('phone', { pattern: { value: /^[6-9]\d{9}$/, message: 'Invalid phone number (10 digits starting 6-9)' } })}
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                  }}
+                  maxLength={10}
                   placeholder="9876543210"
                   className="w-full bg-white border border-gray-200 rounded-xl pl-11 pr-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none hover:border-gray-300 focus:border-black focus:ring-4 focus:ring-black/5 transition-all font-medium"
                 />
