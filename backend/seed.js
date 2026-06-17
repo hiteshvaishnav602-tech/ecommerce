@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import User from './modules/users/user.model.js';
 import Category from './modules/categories/category.model.js';
 import Product from './modules/products/product.model.js';
-import Banner from './modules/banners/banner.model.js';
 import Coupon from './modules/coupons/coupon.model.js';
 import Cart from './modules/cart/cart.model.js';
 import Wishlist from './modules/wishlist/wishlist.model.js';
@@ -21,9 +20,8 @@ const seed = async () => {
     Coupon.deleteMany({}),
     Cart.deleteMany({}),
     Wishlist.deleteMany({}),
-    Banner.deleteMany({ position: 'drops' }),
   ]);
-  console.log('🗑️  Cleared existing data (except other Banners)');
+  console.log('🗑️  Cleared existing data');
 
   // Create admin
   const admin = await User.create({

@@ -8,39 +8,7 @@ import { fetchCategories, fetchTrendingProducts, fetchNewArrivals, fetchBestSell
 
 // ─── Static Data (exactly like The Souled Store) ─────────────────────────────
 
-// Hero Banner images (3-panel slider like TSS)
-const HERO_BANNERS = [
-  {
-    images: [
-      'https://images.unsplash.com/photo-1617137968427-85924c800a22?w=520&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=520&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1492288991661-058aa541ff43?w=520&auto=format&fit=crop',
-    ],
-    label: 'EXPLORE SHIRTS',
-    badge: 'SUMMER \'26',
-    link: '/products?gender=men&category=shirts',
-  },
-  {
-    images: [
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=520&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=520&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=520&auto=format&fit=crop',
-    ],
-    label: 'EXPLORE DRESSES',
-    badge: 'NEW SEASON',
-    link: '/products?gender=women&category=dresses',
-  },
-  {
-    images: [
-      'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=520&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=520&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=520&auto=format&fit=crop',
-    ],
-    label: 'SHOP BOTTOMS',
-    badge: 'TRENDING',
-    link: '/products?category=joggers',
-  },
-]
+
 
 // Latest Drops full-width sliders
 const LATEST_DROPS = [
@@ -129,17 +97,7 @@ function HeroBannerSlider({ banners, gender, loading }) {
           link: gender ? `/products?gender=${gender}` : (b.link || '/products')
         }
       })
-    : (loading
-      ? []
-      : (gender === 'women' || gender === 'sneakers' ? [] : HERO_BANNERS.filter(b => {
-        if (!gender) return true
-        if (gender === 'men') return b.link.includes('gender=men') || !b.link.includes('gender=')
-        if (gender === 'women') return b.link.includes('gender=women') || !b.link.includes('gender=')
-        return true
-      }).map(b => ({
-        ...b,
-        link: gender ? `/products?gender=${gender}` : b.link
-      }))))
+    : []
 
   const total = slides.length
 
@@ -186,7 +144,7 @@ function HeroBannerSlider({ banners, gender, loading }) {
 
   if (total === 0) return null
 
-  const slide = slides[current] || HERO_BANNERS[0]
+  const slide = slides[current] || null
   const isSingle = slide ? slide.images.length === 1 : true
 
   return (
