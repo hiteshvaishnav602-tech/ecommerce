@@ -25,8 +25,8 @@ const seed = async () => {
 
   // Create admin
   const admin = await User.create({
-    name: 'Admin Chawk',
-    email: process.env.ADMIN_EMAIL || 'admin@chawk.com',
+    name: 'Hitesh Admin',
+    email: process.env.ADMIN_EMAIL || 'hiteshadmin@gmail.com',
     password: process.env.ADMIN_PASSWORD || 'Admin@123456',
     role: 'admin',
   });
